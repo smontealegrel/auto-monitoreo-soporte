@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mediastream Live Monitor</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="header-left">
+      <span class="ws-dot" id="wsDot"></span>
+      <span class="header-title">Mediastream Monitor</span>
+    </div>
+    <div class="header-right">
+      <span class="poll-label" id="lastPollLabel">—</span>
+      <button class="btn btn-icon" id="settingsBtn" title="Configuración Slack / Intervalo">⚙</button>
+    </div>
+  </header>
+
+  <!-- Barra de estadísticas -->
+  <div class="stats-bar">
+    <div class="stat"><span class="stat-num" id="totalCount">0</span><span class="stat-label">streams</span></div>
+    <div class="stat healthy"><span class="stat-num" id="healthyCount">0</span><span class="stat-label">sanos</span></div>
+    <div class="stat warning"><span class="stat-num" id="warningCount">0</span><span class="stat-label">alertas</span></div>
+    <div class="stat critical"><span class="stat-num" id="criticalCount">0</span><span class="stat-label">críticos</span></div>
+    <div class="stat stat-right"><span class="poll-interval-badge" id="intervalBadge"></span></div>
+  </div>
+
+  <!-- Contenido principal -->
+  <main>
+
+    <!-- Fila de configuración: Token + Slack -->
+    <div class="config-row">
+
+      <!-- Token card -->
+      <div class="config-card" id="tokenCard">
+        <div class="config-card-label">
+          <span class="config-icon">🔑</span>
+          <span>API Token</span>
+          <span class="token-status-badge" id="tokenBadge">Sin configurar</span>
+        </div>
+        <div class="config-card-body">
+          <div class="token-input-row">
+            <input type="password" id="tokenInput" class="config-input" placeholder="Pega tu token de Mediastream Platform…" autocomplete="off">
+            <button class="btn btn-eye" id="toggleToken" title="Mostrar / ocultar">👁</button>
+            <button class="btn btn-primary btn-sm" id="saveTokenBtn">Guardar</button>
+          </div>
+          <span class="config-hint">Se guarda en memoria del servidor y en tu navegador. Al renovarlo, pégalo aquí y haz clic en Guardar.</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Grid de slots -->
+    <div class="slots-grid" id="slotsGrid">
+      <!-- Generados por JS -->
+    </div>
+
+    <!-- Feed de alertas -->
+    <section class="alerts-section" id="alertsSection" style="display:none">
+      <div class="section-header">
+        <h3>Historial de Alertas</h3>
+        <div class="section-header-right">
+          <span class="alert-badge" id="alertBadge">0</span>
+          <button class="btn btn-sm" id="clearAlertsBtn">Limpiar</button>
+        </div>
+      </div>
+      <div class="alerts-table-header">
+        <span>Hora</span><span>Stream</span><span>Tipo</span><span>Mensaje</span>
+      </div>
+      <div class="alerts-feed" id="alertsFeed"></div>
+    </section>
+
+  </main>
+
+  <!-- Modal: Configuración avanzada (Slack + intervalo) -->
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Configuración Avanzada</h2>
+        <button class="modal-close" id="closeSettings">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="slackInput">Slack Webhook URL</label>
+          <div class="input-row">
+            <input type="password" id="slackInput" placeholder="https://hooks.slack.com/services/…" autocomplete="off">
+            <button class="btn btn-sm btn-eye" id="toggleSlack">👁</button>
+          </div>
+          <span class="form-hint">Las alertas críticas y de advertencia se enviarán a este canal.</span>
+        </div>
+        <div class="form-group">
+          <label>Intervalo de polling API: <strong id="intervalDisplay">60s</strong></label>
+          <input type="range" id="pollIntervalRange" min="10000" max="120000" step="5000" value="60000">
+          <div class="range-labels"><span>10s</span><span>120s</span></div>
+          <span class="form-hint">El M3U8 se refresca automáticamente según el TARGETDURATION del stream (2–6s).</span>
+        </div>
+        <p class="form-hint" style="margin-top:8px">Para cambiar el token, usa la tarjeta principal de la pantalla.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" id="cancelSettings">Cancelar</button>
+        <button class="btn btn-primary" id="saveSettings">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenedor de toasts -->
+  <div id="toastContainer"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
